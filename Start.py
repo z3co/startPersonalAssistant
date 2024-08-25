@@ -16,7 +16,7 @@ import win32gui
 import win32con
 import requests
 from dotenv import load_dotenv
-from github import GitHub
+from github import Github
 from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
@@ -670,7 +670,7 @@ def create_github_repository(project_name, is_private):
         
 
         print(GITHUB_TOKEN)
-        g = GitHub(GITHUB_TOKEN)
+        g = Github(GITHUB_TOKEN)
         user = g.get_user()
         repo = user.create_repo(project_name, private=is_private)
 

@@ -12,6 +12,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 const userPassword = 'jeppe';
+var response = ""
 
 function authenticate(req, res, next) {
     
@@ -85,7 +86,8 @@ app.post('/logout', (req, res) => {
 
 app.post('/command-response', (req, res) => {
     try {
-        const response = req.body.text;
+        
+        response = "Jeppe"
     
         console.log('Received response:', response);
         res.status(200).send(response);
@@ -99,6 +101,11 @@ app.post('/command-response', (req, res) => {
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+})
+
+app.get('/response', (req, res) => {
+    console.log('Received response:', response);
+    res.json({ text: "Jeppe" });
 })
 
 

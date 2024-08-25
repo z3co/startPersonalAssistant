@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="commandStyle.css">
 </head>
 <body>
     <h2>Login</h2>
+    <p id="command-response"></p>
     <form action="/post-command" method="POST">
         <div>
             <label for="command">Command:</label>
@@ -14,12 +16,24 @@
         </div>
         
         <div>
-            <button type="submit"><img src="image.png"></button>
+            <button type="submit" onclick="fetchResponse"><img src="image.png"></button>
         </div>
         
     </form>
     <form action="/logout" method="post">
         <button type="submit">Logout</button>
     </form>
+    
+    <script>
+
+        function fetchResponse() {
+
+            fetch('/response')
+                .then(response => response.json("text"))
+                .then(console.log(response))
+                .then(document.getElementById('command-response').innerHTML = "Jeppe")
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
