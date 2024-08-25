@@ -740,7 +740,7 @@ if __name__ == "__main__": #and why wouldnt it
 
         if argv.__contains__("--forceUI"):
             forceUI = True
-            password = argv[argv.index("--forceUI") + 1]
+            password = input("Enter password: ")
             text_to_speech("Sending password: " + password)
             data = { 'code':password }
             data_json = json.dumps(data)
