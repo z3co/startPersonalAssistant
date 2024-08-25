@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 
 var userPassword = '0000';
-var response = "Jeppe";
+var response = "";
 
 function authenticate(req, res, next) {
     
@@ -71,7 +71,7 @@ app.post('/post-command', authenticate, (req, res) => {
     console.log('Received command:', command);
 
     try {
-        exec('python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" --command "add 2 and 5" --ui')
+        exec(`python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" -C "${command}"`)
     } catch (error) {
         console.error('Error executing command:', error);
         res.status(500).send('Internal Server Error');
@@ -90,8 +90,11 @@ app.post('/logout', (req, res) => {
 
 app.post('/command-response', (req, res) => {
     try {
+        const userResponse = req.body.response
+
+        console.log('Received: ', userResponse);
         
-        response = "Jeppe"
+        response = userResponse
     
         console.log('Received response:', response);
         res.status(200).send(response);

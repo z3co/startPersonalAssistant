@@ -401,11 +401,17 @@ def process_question(text, type):
 
 def respond(response_text):
     try:
-        
-        
+        try:
+            response = requests.post("http://localhost:5289/command-response", json={'response':response_text})
+            print("Response sent: " + response_text)
+        except Exception as e:
+            error_handling(e, "Respond - UI")
         bring_window_to_focus()
         print(response_text)
         text_to_speech(response_text)
+        global forceUI
+        
+
     except Exception as e:
         error_handling(e, "Respond - general")
     
