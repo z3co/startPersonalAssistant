@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="commandStyle.css">
+    <script>
+        async function fetchResponse() {
+            console.log("Fetching response")
+            try {
+            const response = await fetch("/response");
+            if (!response.ok) {
+                throw new Error("Network response was not OK");
+            }
+            const todos = await response.json();
+            document.getElementById("command-response").innerHTML = todos.text
+        } catch (error) {
+            console.error("There was a problem with your fetch request: ", error);
+        }
+        }
+           
+    </script>
 </head>
 <body>
     <h2>Login</h2>
@@ -25,21 +41,6 @@
     </form>
     <button onclick="fetchResponse()">Refresh</button>
     
-    <script>
-        async function fetchResponse() {
-            console.log("Fetching response")
-            try {
-            const response = await fetch("/response");
-            if (!response.ok) {
-                throw new Error("Network response was not OK");
-            }
-            const todos = await response.json();
-            console.log("Resposne: " + todos);
-        } catch (error) {
-            console.error("There was a problem with your fetch request: ", error);
-        }
-        }
-           
-    </script>
+    
 </body>
 </html>
