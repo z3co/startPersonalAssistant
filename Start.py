@@ -16,7 +16,7 @@ import win32gui
 import win32con
 import requests
 from dotenv import load_dotenv
-from github import Github
+from github import GitHub
 from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
@@ -670,7 +670,7 @@ def create_github_repository(project_name, is_private):
         
 
         print(GITHUB_TOKEN)
-        g = Github(GITHUB_TOKEN)
+        g = GitHub(GITHUB_TOKEN)
         user = g.get_user()
         repo = user.create_repo(project_name, private=is_private)
 
@@ -689,21 +689,7 @@ def open_in_vscode(file_path):
     except Exception as e:
         error_handling(e, "Opening in VS Code")
 
-
-                
-            
-
-if __name__ == "__main__": #and why wouldnt it
- 
-
-    bring_window_to_focus()
-
-    keyword = "start"
-
-
-    game_running = False
-
-    
+def main():
     try:
         respond("Hello my name is start, i am your personal assistant, just call my name if you need me")
 
@@ -724,3 +710,36 @@ if __name__ == "__main__": #and why wouldnt it
 
     except Exception as e:
         error_handling(e, "startup")
+
+
+
+                
+            
+
+if __name__ == "__main__": #and why wouldnt it
+ 
+
+    bring_window_to_focus()
+
+    keyword = "start"
+    global forceUI
+    forceUI = False
+
+
+    game_running = False
+
+    if argv.__contains__("--command"):
+        command = argv[argv.index("--command") + 1]
+        process_command(command)
+    elif argv.__contains__("-C"):
+        command = argv[argv.index("-C") + 1]
+        process_command(command)
+    else:
+
+
+        if argv.__contains__("--forceUI"):
+            forceUI = True
+            subprocess.run("node server.js")  
+        else:
+            main()
+        
