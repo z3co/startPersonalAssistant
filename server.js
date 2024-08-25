@@ -6,12 +6,16 @@ const path = require('path');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
 
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.static('public'));
 app.use(cookieParser());
+app.use(bodyParser.json());
 
-const userPassword = 'jeppe';
+
+
+var userPassword = '0000';
 var response = "Jeppe";
 
 function authenticate(req, res, next) {
@@ -98,6 +102,19 @@ app.post('/command-response', (req, res) => {
     }
     
 });
+
+app.post('/set-password', (req, res) => {
+    try {
+        const password = req.body.code;
+        
+    
+        console.log('Password: ' + password);
+        userPassword = req.body.code;
+    } catch (error) {
+        console.error('Error processing password:', error);
+        res.status(500).send('Internal Server Error');
+    }
+})
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

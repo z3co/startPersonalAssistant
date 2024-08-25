@@ -21,6 +21,7 @@ from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
 from sys import argv
+import json
 
 #Idea for later use make a ui with tkinter
 
@@ -739,7 +740,12 @@ if __name__ == "__main__": #and why wouldnt it
 
         if argv.__contains__("--forceUI"):
             forceUI = True
-            subprocess.run("node server.js")  
+            password = argv[argv.index("--forceUI") + 1]
+            text_to_speech("Sending password: " + password)
+            data = { 'code':password }
+            data_json = json.dumps(data)
+            subprocess.Popen("node server.js")
+            response = requests.post("http://localhost:5289/set-password", json={'code':password}) 
         else:
             main()
         
