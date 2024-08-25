@@ -12,7 +12,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 const userPassword = 'jeppe';
-var response = ""
+var response = "Jeppe";
 
 function authenticate(req, res, next) {
     
@@ -30,7 +30,7 @@ function authenticate(req, res, next) {
         // User is not authenticated, send a 401 Unauthorized response
         res.status(401).send('Unauthorized: Please log in first');
     }
-}
+};
 
 app.post('/login', async (req, res) => {
 
@@ -97,16 +97,21 @@ app.post('/command-response', (req, res) => {
         res.status(500).send('Internal Server Error');
     }
     
-})
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-})
+});
 
 app.get('/response', (req, res) => {
-    console.log('Received response:', response);
-    res.json({ text: "Jeppe" });
-})
+    try {
+    console.log('response:', { response: response });
+    res.status(200).json({ text: response });
+    } catch (error) {
+        console.error('Error processing response:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
 
