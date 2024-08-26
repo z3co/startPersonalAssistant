@@ -16,11 +16,12 @@ import win32gui
 import win32con
 import requests
 from dotenv import load_dotenv
-from github import Github
+from github import GitHub
 from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
 from sys import argv
+import json
 
 #Idea for later use make a ui with tkinter
 
@@ -125,7 +126,15 @@ def process_commands(commands): #F****** useless
 
 #Make this better
 def ask_question(question, type):
+    global forceUI
+    global questionAsked 
+    questionAsked = True
     respond(question)
+    
+    if forceUI == True:
+        response = requests.post("http://localhost:5289/post-type", json={'question_type':type})
+        exit(1)
+        
 
     global listening_for_keyword
     listening_for_keyword = False
@@ -399,12 +408,24 @@ def process_question(text, type):
         error_handling(e, "process command - questions")
 
 def respond(response_text):
+    global questionAsked
     try:
-        
-        
+        try:
+            if questionAsked == True:
+                
+                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':'true'})
+                print("Response sent: " + response_text)
+            else:
+                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':'false'})
+                print("Response sent: " + response_text)
+        except Exception as e:
+            error_handling(e, "Respond - UI")
         bring_window_to_focus()
         print(response_text)
         text_to_speech(response_text)
+        global forceUI
+        
+
     except Exception as e:
         error_handling(e, "Respond - general")
     
@@ -670,7 +691,7 @@ def create_github_repository(project_name, is_private):
         
 
         print(GITHUB_TOKEN)
-        g = Github(GITHUB_TOKEN)
+        g = GitHub(GITHUB_TOKEN)
         user = g.get_user()
         repo = user.create_repo(project_name, private=is_private)
 
@@ -689,21 +710,7 @@ def open_in_vscode(file_path):
     except Exception as e:
         error_handling(e, "Opening in VS Code")
 
-
-                
-            
-
-if __name__ == "__main__": #and why wouldnt it
- 
-
-    bring_window_to_focus()
-
-    keyword = "start"
-
-
-    game_running = False
-
-    
+def main():
     try:
         respond("Hello my name is start, i am your personal assistant, just call my name if you need me")
 
@@ -724,3 +731,55 @@ if __name__ == "__main__": #and why wouldnt it
 
     except Exception as e:
         error_handling(e, "startup")
+
+
+
+                
+            
+
+if __name__ == "__main__": #and why wouldnt it
+ 
+
+    bring_window_to_focus()
+
+    keyword = "start"
+    global forceUI, questionAsked
+    forceUI = False
+    questionAsked = False
+
+    game_running = False
+
+    if argv.__contains__("--command"):
+        command = argv[argv.index("--command") + 1]
+        forceUI = True
+        process_command(command)
+        
+    elif argv.__contains__("-C"):
+        command = argv[argv.index("-C") + 1]
+        forceUI = True
+        process_command(command)
+        
+    elif argv.__contains__("--answer"):
+        command = argv[argv.index("--answer") + 1]
+        questionType = argv[argv.index("--answer") + 2]
+        forceUI = True
+        process_question(command, questionType)
+    elif argv.__contains__("-A"):
+        forceUI = True
+        questionType = argv[argv.index("-A") + 2]
+        command = argv[argv.index("-A") + 1]
+        process_question(command, questionType)
+    else:
+
+
+        if argv.__contains__("--forceUI"):
+            forceUI = True
+            password = input("Enter password: ")
+            text_to_speech("Sending password: " + password)
+            data = { 'code':password }
+            data_json = json.dumps(data)
+            subprocess.Popen("node server.js")
+            response = requests.post("http://localhost:5289/set-password", json={'code':password}) 
+        else:
+            main()
+        
