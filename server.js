@@ -18,6 +18,8 @@ app.use(bodyParser.json());
 var userPassword = '0000';
 var response = "";
 var newResponse = false;
+var questionAsked = false;
+var questionType = ''
 
 function authenticate(req, res, next) {
     
@@ -73,13 +75,23 @@ app.post('/post-command', authenticate, (req, res) => {
     console.log('Received command:', command);
 
     try {
-        exec(`python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" -C "${command}"`)
-        
+        if (questionAsked === true) {
+            exec(`python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" -A "${command}" "${questionType}`)
+            console.log('Received command:', command);
+            questionAsked = false;
+        } else {
+            exec(`python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" -C "${command}"`)
+        }
     } catch (error) {
         console.error('Error executing command:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.post('/post-type', (req, res) => {
+    questionType = req.body.question_type;
+    console.log('Received question type:', questionType);
+})
 
 app.post('/logout', (req, res) => {
     // Clear the authentication token or session data
@@ -94,8 +106,13 @@ app.post('/logout', (req, res) => {
 app.post('/command-response', (req, res) => {
     try {
         const userResponse = req.body.response
+        const question = req.body.question
 
         console.log('Received: ', userResponse);
+
+        if (question === 'true') {
+            questionAsked = true;
+        }
         
         response = userResponse
         newResponse = true;

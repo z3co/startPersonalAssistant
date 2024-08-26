@@ -132,7 +132,9 @@ def ask_question(question, type):
     respond(question)
     
     if forceUI == True:
+        response = requests.post("http://localhost:5289/post-type", json={'question_type':type})
         exit(1)
+        
 
     global listening_for_keyword
     listening_for_keyword = False
@@ -411,10 +413,10 @@ def respond(response_text):
         try:
             if questionAsked == True:
                 
-                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':questionAsked})
+                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':'true'})
                 print("Response sent: " + response_text)
             else:
-                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':questionAsked})
+                response = requests.post("http://localhost:5289/command-response", json={'response':response_text, 'question':'false'})
                 print("Response sent: " + response_text)
         except Exception as e:
             error_handling(e, "Respond - UI")
@@ -759,12 +761,14 @@ if __name__ == "__main__": #and why wouldnt it
         
     elif argv.__contains__("--answer"):
         command = argv[argv.index("--answer") + 1]
+        questionType = argv[argv.index("--answer") + 2]
         forceUI = True
-        process_question(command)
+        process_question(command, questionType)
     elif argv.__contains__("-A"):
         forceUI = True
+        questionType = argv[argv.index("-A") + 2]
         command = argv[argv.index("-A") + 1]
-        process_question(command)
+        process_question(command, questionType)
     else:
 
 
