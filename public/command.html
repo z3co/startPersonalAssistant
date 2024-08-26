@@ -9,24 +9,40 @@
         async function fetchResponse() {
         
             console.log("Fetching response")
+            textCommand = document.getElementById("command-response").innerHTML;
             
             
+                
             
             try {
-                
+                while (true) {
                 const response = await fetch("/response");
                 if (!response.ok) {
                     throw new Error("Network response was not OK");
                 }
                 
+                
                 const todos = await response.json();
-                while (!document.getElementById("command-response") == todos) {
-                document.getElementById("command-response").innerHTML = todos.text
-                }
+                
+                    if (todos.responseStatus == true) {
+                    document.getElementById("command-response").innerHTML = todos.text
+                    break;
+                    }
+                    
+                
+                    
+            }
                 
             } catch (error) {
                 console.error("There was a problem with your fetch request: ", error);
             }
+        
+        }
+
+        function fetchResponseTimeout() {
+            setTimeout(() => {
+                fetchResponse();
+            }, 1000);
         }
         
         
@@ -47,7 +63,7 @@
         </div>
         
         <div>
-            <button type="submit" onclick="fetchResponse()"><img src="image.png"></button>
+            <button type="submit" onclick="fetchResponseTimeout()"><img src="image.png"></button>
         </div>
         
     </form>

@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 var userPassword = '0000';
 var response = "";
+var newResponse = false;
 
 function authenticate(req, res, next) {
     
@@ -67,11 +68,13 @@ function exec(cmd, handler = function(error, stdout, stderr){console.log(stdout)
     }
 
 app.post('/post-command', authenticate, (req, res) => {
+    newResponse = false;
     const { command } = req.body;
     console.log('Received command:', command);
 
     try {
         exec(`python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" -C "${command}"`)
+        
     } catch (error) {
         console.error('Error executing command:', error);
         res.status(500).send('Internal Server Error');
@@ -95,7 +98,8 @@ app.post('/command-response', (req, res) => {
         console.log('Received: ', userResponse);
         
         response = userResponse
-    
+        newResponse = true;
+        
         console.log('Received response:', response);
         res.status(200).send(response);
 
@@ -126,7 +130,7 @@ app.get('/', (req, res) => {
 app.get('/response', (req, res) => {
     try {
     console.log('response:', { response: response });
-    res.status(200).json({ text: response });
+    res.status(200).json({ text: response, responseStatus: newResponse });
     } catch (error) {
         console.error('Error processing response:', error);
         res.status(500).send('Internal Server Error');
