@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Command</title>
     <link rel="stylesheet" href="commandStyle.css">
     <script>
         async function fetchResponse() {
@@ -54,21 +54,25 @@
     </script>
 </head>
 <body>
-    <h2>Login</h2>
-    <p id="command-response"></p>
+    <div class="main-container">
+    
+    <p id="command-response" class="command-response">Test</p>
     <form action="/post-command" method="POST">
         <div>
-            <label for="command">Command:</label>
-            <input type="text" id="command" name="command" placeholder="Command fx. take notes" required>
+            
+            <input class="input" type="text" id="command" name="command" placeholder="Command fx. take notes" required>
         </div>
         
-        <div>
-            <button type="submit" onclick="fetchResponseTimeout()"><img src="image.png"></button>
+        <div class="send_button-container">
+            <button type="submit" class="send_button" onclick="fetchResponseTimeout()"><img class="button-image" src="send_button.png"></button>
         </div>
         
     </form>
+
+    </div>
+    <img class="image" src="start_logo.png">
     <form action="/logout" method="post">
-        <button type="submit">Logout</button>
+        <button class="logout" type="submit">Logout</button>
     </form>
     
     
