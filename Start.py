@@ -737,7 +737,7 @@ def main():
                 
             
 
-if __name__ == "__main__": #and why wouldnt it
+if __name__ == "__main__": #and why wouldn't it
  
 
     bring_window_to_focus()
