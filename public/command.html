@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="commandStyle.css">
+    <script>
+        async function fetchResponse() {
+        
+            console.log("Fetching response")
+            
+            
+            
+            try {
+                while (true) {
+                const response = await fetch("/response");
+                if (!response.ok) {
+                    throw new Error("Network response was not OK");
+                }
+                
+                const todos = await response.json();
+                
+                document.getElementById("command-response").innerHTML = todos.text
+                
+                document.getElementById("command-response").addEventListener("change", "break;")
+                }
+            } catch (error) {
+                console.error("There was a problem with your fetch request: ", error);
+            }
+        }
+        
+        
+        
+        fetchResponse() // Fetching the response on page load. It's important to call this function here, as fetchResponse() is called when the button is clicked. This ensures that the response is fetched even if the user refreshes the page.
+        
+        
+        
+    </script>
+</head>
+<body>
+    <h2>Login</h2>
+    <p id="command-response"></p>
+    <form action="/post-command" method="POST">
+        <div>
+            <label for="command">Command:</label>
+            <input type="text" id="command" name="command" placeholder="Command fx. take notes" required>
+        </div>
+        
+        <div>
+            <button type="submit" onclick="fetchResponse()"><img src="image.png"></button>
+        </div>
+        
+    </form>
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+    
+    
+    
+</body>
+</html>

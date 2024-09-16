@@ -16,11 +16,12 @@ import win32gui
 import win32con
 import requests
 from dotenv import load_dotenv
-from github import Github
+from github import GitHub
 from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
 from sys import argv
+import json
 
 #Idea for later use make a ui with tkinter
 
@@ -400,11 +401,17 @@ def process_question(text, type):
 
 def respond(response_text):
     try:
-        
-        
+        try:
+            response = requests.post("http://localhost:5289/command-response", json={'response':response_text})
+            print("Response sent: " + response_text)
+        except Exception as e:
+            error_handling(e, "Respond - UI")
         bring_window_to_focus()
         print(response_text)
         text_to_speech(response_text)
+        global forceUI
+        
+
     except Exception as e:
         error_handling(e, "Respond - general")
     
@@ -670,7 +677,7 @@ def create_github_repository(project_name, is_private):
         
 
         print(GITHUB_TOKEN)
-        g = Github(GITHUB_TOKEN)
+        g = GitHub(GITHUB_TOKEN)
         user = g.get_user()
         repo = user.create_repo(project_name, private=is_private)
 
@@ -689,21 +696,7 @@ def open_in_vscode(file_path):
     except Exception as e:
         error_handling(e, "Opening in VS Code")
 
-
-                
-            
-
-if __name__ == "__main__": #and why wouldnt it
- 
-
-    bring_window_to_focus()
-
-    keyword = "start"
-
-
-    game_running = False
-
-    
+def main():
     try:
         respond("Hello my name is start, i am your personal assistant, just call my name if you need me")
 
@@ -724,3 +717,41 @@ if __name__ == "__main__": #and why wouldnt it
 
     except Exception as e:
         error_handling(e, "startup")
+
+
+
+                
+            
+
+if __name__ == "__main__": #and why wouldnt it
+ 
+
+    bring_window_to_focus()
+
+    keyword = "start"
+    global forceUI
+    forceUI = False
+
+
+    game_running = False
+
+    if argv.__contains__("--command"):
+        command = argv[argv.index("--command") + 1]
+        process_command(command)
+    elif argv.__contains__("-C"):
+        command = argv[argv.index("-C") + 1]
+        process_command(command)
+    else:
+
+
+        if argv.__contains__("--forceUI"):
+            forceUI = True
+            password = input("Enter password: ")
+            text_to_speech("Sending password: " + password)
+            data = { 'code':password }
+            data_json = json.dumps(data)
+            subprocess.Popen("node server.js")
+            response = requests.post("http://localhost:5289/set-password", json={'code':password}) 
+        else:
+            main()
+        
