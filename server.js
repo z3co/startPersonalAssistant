@@ -133,7 +133,6 @@ app.post("/set-password", (req, res) => {
   try {
     const password = req.body.code;
 
-    console.log("Password: " + password);
     userPassword = req.body.code;
   } catch (error) {
     console.error("Error processing password:", error);

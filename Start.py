@@ -22,6 +22,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 from sys import argv
 import json
+from getpass import getpass
 
 #Idea for later use make a ui with tkinter
 
@@ -774,7 +775,7 @@ if __name__ == "__main__": #and why wouldn't it
 
         if argv.__contains__("--forceUI"):
             forceUI = True
-            password = input("Enter password: ")
+            password = getpass("Enter password: ")
             text_to_speech("Sending password: " + password)
             data = { 'code':password }
             data_json = json.dumps(data)
