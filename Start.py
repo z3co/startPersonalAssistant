@@ -12,12 +12,12 @@ import time
 import datetime
 import logging
 import ctypes
-import win32gui
-import win32con
+#import win32gui
+#import win32con
 import requests
 from dotenv import load_dotenv
-from github import Github
-from github import Auth
+from github import GitHub
+#from github import Auth
 import tkinter as tk
 from tkinter import scrolledtext
 from sys import argv
@@ -80,7 +80,7 @@ def listen_for_keyword(keyword):
                 speech = recognizer.recognize_google(audio).lower()
                 print()
                 if keyword in speech:
-                    bring_window_to_focus()
+                    #bring_window_to_focus()
                     print(f"keyword detected now listening...")
                     text_to_speech("What can i do for you")
                     transcribbed_text = record_and_transcribe()
@@ -421,7 +421,7 @@ def respond(response_text):
                 print("Response sent: " + response_text)
         except Exception as e:
             error_handling(e, "Respond - UI")
-        bring_window_to_focus()
+        #bring_window_to_focus()
         print(response_text)
         text_to_speech(response_text)
         global forceUI
@@ -560,20 +560,20 @@ def search_notes(query):
     else:
         error_handling("No notes", "Search for notes")
 
-def bring_window_to_focus():
-    hwnd = ctypes.windll.kernel32.GetConsoleWindow()
-    if hwnd != 0:
-
-        try:
-            win32gui.SetForegroundWindow(hwnd)
-        except Exception as e:
-            error_handling(e, "Bringing window to focus, problem most likely fixed itself")
-
-            win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
-                                  win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-            time.sleep(0.1)
-            win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
-                                  win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+#def bring_window_to_focus():
+   # hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+   # if hwnd != 0:
+#
+   #     try:
+   #         win32gui.SetForegroundWindow(hwnd)
+   #     except Exception as e:
+     #       error_handling(e, "Bringing window to focus, problem most likely fixed itself")
+#
+     #      win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+         #                         win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+      #      time.sleep(0.1)
+       #     win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
+       #                           win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
             
 def calculate(text):
     try:
@@ -692,7 +692,7 @@ def create_github_repository(project_name, is_private):
         
 
         print(GITHUB_TOKEN)
-        g = Github(GITHUB_TOKEN)
+        g = GitHub(GITHUB_TOKEN)
         user = g.get_user()
         repo = user.create_repo(project_name, private=is_private)
 
@@ -741,7 +741,7 @@ def main():
 if __name__ == "__main__": #and why wouldn't it
  
 
-    bring_window_to_focus()
+    #bring_window_to_focus()
 
     keyword = "start"
     global forceUI, questionAsked
@@ -776,12 +776,12 @@ if __name__ == "__main__": #and why wouldn't it
         if argv.__contains__("--forceUI"):
             forceUI = True
             password = getpass("Enter password: ")
-            text_to_speech("Sending password: " + password)
+            #text_to_speech("Sending password: " + password)
             data = { 'code':password }
             data_json = json.dumps(data)
             url = "http://localhost:5289"
             webbrowser.open(url)
-            subprocess.Popen("node server.js")
+            subprocess.Popen(["ls"], stdout=subprocess.PIPE)
             response = requests.post("http://localhost:5289/set-password", json={'code':password})
             
         else:
