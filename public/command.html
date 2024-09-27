@@ -1,81 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Command</title>
-    <link rel="stylesheet" href="commandStyle.css">
+    <link rel="stylesheet" href="commandStyle.css" />
     <script>
-        async function fetchResponse() {
-        
-            console.log("Fetching response")
-            textCommand = document.getElementById("command-response").innerHTML;
-            
-            
-                
-            
-            try {
-                while (true) {
-                const response = await fetch("/response");
-                if (!response.ok) {
-                    throw new Error("Network response was not OK");
-                }
-                
-                
-                const todos = await response.json();
-                
-                    if (todos.responseStatus == true) {
-                    document.getElementById("command-response").innerHTML = todos.text
-                    break;
-                    }
-                    
-                
-                    
-            }
-                
-            } catch (error) {
-                console.error("There was a problem with your fetch request: ", error);
-            }
-        
-        }
+      async function fetchResponse() {
+        console.log("Fetching response");
+        textCommand = document.getElementById("command-response").innerHTML;
 
-        function fetchResponseTimeout() {
-            setTimeout(() => {
-                fetchResponse();
-            }, 1000);
+        try {
+          while (true) {
+            const response = await fetch("/response");
+            if (!response.ok) {
+              throw new Error("Network response was not OK");
+            }
+
+            const todos = await response.json();
+
+            if (todos.responseStatus == true) {
+              document.getElementById("command-response").innerHTML =
+                todos.text;
+              break;
+            }
+          }
+        } catch (error) {
+          console.error("There was a problem with your fetch request: ", error);
         }
-        
-        
-        
-        fetchResponse() // Fetching the response on page load. It's important to call this function here, as fetchResponse() is called when the button is clicked. This ensures that the response is fetched even if the user refreshes the page.
-        
-        
-        
+      }
+
+      function fetchResponseTimeout() {
+        setTimeout(() => {
+          fetchResponse();
+        }, 1000);
+      }
+
+      fetchResponse(); // Fetching the response on page load. It's important to call this function here, as fetchResponse() is called when the button is clicked. This ensures that the response is fetched even if the user refreshes the page.
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main-container">
-    
-    <p id="command-response" class="command-response"></p>
-    <form action="/post-command" method="POST">
+      <p id="command-response" class="command-response"></p>
+      <form action="/post-command" method="POST">
         <div>
-            
-            <input class="input" type="text" id="command" name="command" placeholder="Command fx. take notes" required>
+          <input
+            class="input"
+            type="text"
+            id="command"
+            name="command"
+            placeholder="Command fx. take notes"
+            required
+          />
         </div>
-        
-        <div class="send_button-container">
-            <button type="submit" class="send_button" onclick="fetchResponseTimeout()"><img class="button-image" src="send_button.png"></button>
-        </div>
-        
-    </form>
 
+        <div class="send_button-container">
+          <button
+            type="submit"
+            class="send_button"
+            onclick="fetchResponseTimeout()"
+          >
+            <img class="button-image" src="send_button.png" />
+          </button>
+        </div>
+      </form>
     </div>
-    <img class="image" src="start_logo.png">
+    <img class="image" src="start_logo.png" />
     <form action="/logout" method="post">
-        <button class="logout" type="submit">Logout</button>
+      <button class="logout" type="submit">Logout</button>
     </form>
-    
-    
-    
-</body>
+  </body>
 </html>
