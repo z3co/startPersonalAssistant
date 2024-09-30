@@ -44,6 +44,9 @@ app.post("/login", async (req, res) => {
     if (passwordMatch) {
       // Password matches, set the loggedIn cookie to 'true'
       res.cookie("loggedIn", "true");
+      exec(
+        `python "C:\\Users\\Jeppe\\Codes\\In progress\\StartPersonalAssistant\\Start.py" --respond "Authorized"`
+      );
       res.redirect("command.html");
       console.log("Logged in successfully");
     } else {

@@ -770,6 +770,8 @@ if __name__ == "__main__": #and why wouldn't it
         questionType = argv[argv.index("-A") + 2]
         command = argv[argv.index("-A") + 1]
         process_question(command, questionType)
+    elif argv.__contains__("--respond"):
+        respond(argv[argv.index("--respond") + 1])
     else:
 
 
