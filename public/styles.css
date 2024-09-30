@@ -1,0 +1,64 @@
+@font-face {
+    font-family: baloo_2_semibold;
+    src: url(baloo_2_semibold.ttf);
+}
+
+.main-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+.login-button-container {
+    display: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(110%, -100%);
+}
+
+.login-title {
+    display: block;
+    text-align: center;
+    font-family: baloo_2_semibold;
+}
+
+body {
+    background-color: #EBEBEB;
+}
+
+.input-command {
+    background-color: #FFF;
+    border: 10px solid #fff;
+    border-radius: 7px;
+    max-height: 80px;
+    
+}
+
+.login-button {
+    background-color: #FFF;
+    color: #000000;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-family: baloo_2_semibold;
+}
+
+.logo {
+    display: absolute;
+    
+    height: 200px;
+    
+    background-repeat: no-repeat;
+    
+    background-size: contain;
+    margin-bottom: 20px;
+    margin-left: 39%;
+    margin-top: 40%;
+    
+
+}
+
+
+
